@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+
+set -e
+
+if ! [ -x "$(command -v code)" ]; then
+	echo "You don't have Visual Studio Code installed. Please install it first."
+	echo "sudo snap install code --classic"
+	exit 1
+fi
+
+if ! [ -x "$(command -v ansible)" ]; then
+	# Installs ansible
+	echo "Installing Ansible..."
+	sudo apt-add-repository -y ppa:ansible/ansible
+	sudo apt-get update -y
+	sudo apt-get install -y curl git software-properties-common ansible
+fi
+
+if ! ansible-galaxy collection list | grep -q 'community.general'; then
+	echo "Installing community.general collection..."
+	ansible-galaxy collection install community.general
+fi
+
+PLAYBOOK="ide_setup_playbook.yml"
+
+echo "INFO: Your 'BECOME' password is your sudo password"
+ansible-playbook "$PLAYBOOK" --ask-become-pass
+
+if command -v terminal-notifier 1>/dev/null 2>&1; then
+	terminal-notifier -title "Ansible: Bootstrap complete" -message "Successfully set up dev environment."
+fi
+
+echo "Playbook execution complete."
+echo "Source your .bashrc or .zshrc to apply all changes."
+echo "  source $HOME/.bashrc"
+
+exit 0

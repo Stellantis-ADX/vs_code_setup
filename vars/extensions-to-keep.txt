@@ -1,0 +1,4 @@
+Codeium.codeium
+GitHub.copilot
+GitHub.copilot-chat
+

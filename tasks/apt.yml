@@ -1,0 +1,73 @@
+---
+- name: Remove old clang tools
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    state: absent
+  loop:
+    - clang-format
+    - clang-tidy
+    - clangd
+
+- name: Ensure required dependencies are installed
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    state: present
+    update_cache: true
+  loop:
+    - lsb-release
+    - wget
+    - software-properties-common
+    - gnupg
+
+- name: Download llvm.sh script
+  ansible.builtin.get_url:
+    url: https://apt.llvm.org/llvm.sh
+    dest: /tmp/llvm.sh
+    mode: "0755"
+
+- name: Make llvm.sh executable
+  ansible.builtin.file:
+    path: /tmp/llvm.sh
+    mode: "0755"
+    owner: root
+    group: root
+
+- name: Run the llvm.sh script with LLVM version 19
+  ansible.builtin.shell: "/tmp/llvm.sh 19"
+  args:
+    executable: /bin/bash
+  environment:
+    DEBIAN_FRONTEND: noninteractive
+  register: llvm_install
+  changed_when: llvm_install.rc != 0
+
+- name: Clean up the llvm.sh script
+  ansible.builtin.file:
+    path: /tmp/llvm.sh
+    state: absent
+
+- name: Install latest clang tools
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - clang-format
+    - clang-tidy
+    - clangd
+
+- name: Update clangd symlink to use clangd-19
+  ansible.builtin.shell: |
+    update-alternatives --install /usr/bin/clangd clangd /usr/bin/clangd-19 100
+    update-alternatives --set clangd /usr/bin/clangd-19
+  register: clangd_symlink
+  changed_when: clangd_symlink.rc != 0
+
+- name: Install shellcheck
+  ansible.builtin.apt:
+    name: shellcheck
+    state: present
+
+- name: Install cppcheck static code analysis tool for cpp
+  ansible.builtin.apt:
+    name: cppcheck
+    state: present

@@ -1,0 +1,61 @@
+---
+vs_code_extensions:
+  # Ansible
+  # Requires Python3.9 for ansible-lint and as most people are
+  # on Ubuntu20 with Python3.8 this will always yield an error
+  # - redhat.ansible
+  # Arxml
+  - jonasrock.arxml-navigationhelper
+  # Bazel / Starlark
+  - BazelBuild.vscode-bazel
+  # c++
+  - ms-vscode.cpptools
+  - llvm-vs-code-extensions.vscode-clangd
+  - xaver.clang-format
+  - CS128.cs128-clang-tidy
+  - akiramiyakoda.cppincludeguard
+  - NathanJ.cppcheck-plugin
+  - mine.cpplint
+  # Docker
+  - ms-azuretools.vscode-docker
+  - ms-vscode-remote.remote-containers
+  # Git
+  - eamodio.gitlens
+  # Github actions workflows
+  - arahata.linter-actionlint
+  - github.vscode-github-actions
+  # JSON
+  - ZainChen.json
+  # Jinja
+  - samuelcolvin.jinjahtml
+  # Lua
+  - sumneko.lua
+  # Markdown
+  - DavidAnson.vscode-markdownlint
+  - yzhang.markdown-all-in-one
+  # Python
+  - detachhead.basedpyright
+  - ms-python.black-formatter
+  - ms-python.debugpy
+  - ms-python.isort
+  - ms-python.mypy-type-checker
+  - ms-python.pylint
+  # Shell
+  - mkhl.shfmt
+  - timonwong.shellcheck
+  - mads-hartmann.bash-ide-vscode
+  # SQL
+  - dorzey.vscode-sqlfluff
+  # Toml
+  - tamasfe.even-better-toml
+  # UML
+  - jebbs.plantuml
+  # YAML / XML
+  - redhat.vscode-yaml
+  - redhat.vscode-xml
+  # Others
+  - psioniq.psi-header
+  - jasonnutter.vscode-codeowners
+  - ms-vscode.remote-explorer
+  - ms-vscode-remote.remote-ssh
+  - ms-vscode.remote-server

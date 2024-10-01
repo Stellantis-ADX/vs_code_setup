@@ -1,0 +1,52 @@
+---
+- name: Ensure venv
+  ansible.builtin.apt:
+    name: python3-venv
+    update_cache: true
+    state: present
+
+- name: Install pipx
+  ansible.builtin.apt:
+    name: pipx
+    update_cache: true
+    state: present
+
+- name: Ensure pipx path is set
+  become_user: "{{ main_user }}"
+  ansible.builtin.shell: |
+    python3 -m pipx ensurepath
+  args:
+    executable: /bin/bash
+  register: ensure_pipx_path
+  changed_when: ensure_pipx_path.rc != 0
+  failed_when: ensure_pipx_path.rc != 0
+
+- name: Install yamllint using pipx
+  become_user: "{{ main_user }}"
+  ansible.builtin.shell: |
+    pipx install yamllint --force
+  args:
+    executable: /bin/bash
+  register: install_yamllint
+  changed_when: install_yamllint.rc != 0
+  failed_when: install_yamllint.rc != 0
+
+- name: Install sqlfluff using pipx
+  become_user: "{{ main_user }}"
+  ansible.builtin.shell: |
+    pipx install sqlfluff --force
+  args:
+    executable: /bin/bash
+  register: install_sqlfluff
+  changed_when: install_sqlfluff.rc != 0
+  failed_when: install_sqlfluff.rc != 0
+
+- name: Install cpplint using pipx
+  become_user: "{{ main_user }}"
+  ansible.builtin.shell: |
+    pipx install cpplint  --force
+  args:
+    executable: /bin/bash
+  register: install_cpplint
+  changed_when: install_cpplint.rc != 0
+  failed_when: install_cpplint.rc != 0

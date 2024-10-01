@@ -1,0 +1,22 @@
+---
+- hosts: localhost
+  become: true
+  vars_files:
+    - vars/vs_code_extensions.yml
+  vars:
+    main_user: "{{ lookup('env', 'USER') }}"
+    home_dir: "/home/{{ lookup('env', 'USER') }}"
+    settings_template: "vars/vs_code_settings.json.j2"
+  pre_tasks:
+    - name: Pre-run | update package cache
+      tags: always
+      apt: update_cache=yes
+      changed_when: true
+
+  tasks:
+    - include_tasks: tasks/code.yml
+    - include_tasks: tasks/misc.yml
+    - include_tasks: tasks/apt.yml
+    - include_tasks: tasks/pip.yml
+    - include_tasks: tasks/go.yml
+    - include_tasks: tasks/snap.yml

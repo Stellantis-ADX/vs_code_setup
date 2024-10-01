@@ -1,0 +1,68 @@
+{
+  "C_Cpp.intelliSenseEngine": "disabled",
+  "bazel.lsp.command": "starpls",
+  "editor.formatOnSave": true,
+  "python.languageServer": "None",
+  "shellcheck.run": "onType",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.shellcheck": "explicit"
+  },
+  "linter.linters": {
+    "yamllint": {
+      "enabled": true
+    },
+    "sqlfluff": {
+      "enabled": true
+    }
+  },
+  "bazel.buildifierExecutable": "{{ home_dir }}/go/bin/buildifier",
+  "bazel.buildifierFixOnFormat": true,
+  "ansible.python.interpreterPath": "/bin/python3",
+  "[cpp]": {
+    "editor.defaultFormatter": "xaver.clang-format"
+  },
+  "clangd.arguments": [
+    "--enable-config"
+  ],
+  "C/C++ Include Guard.Comment Style": "Line",
+  "C/C++ Include Guard.File Path Pascal Case to Snake Case": true,
+  "C/C++ Include Guard.Macro Type": "Filepath",
+  "C/C++ Include Guard.Remove Extension": false,
+  "C/C++ Include Guard.Spaces After Endif": 2,
+  "C/C++ Include Guard.Auto Update Include Guard": false,
+  "C/C++ Include Guard.Insert Blank Line": false,
+  "psi-header.variables": [
+      ["company", "Stellantis"],
+  ],
+  "psi-header.lang-config": [
+      {
+          "language": "cpp",
+          "begin": "///",
+          "prefix": "/// ",
+          "end": "///",
+          "forceToTop": true,
+          "blankLinesAfter": 1,
+          "beforeHeader": [],
+          "afterHeader": [],
+      },
+      {
+          "language": "python",
+          "begin": "###",
+          "prefix": "### ",
+          "end": "###",
+          "forceToTop": true,
+          "blankLinesAfter": 1,
+          "beforeHeader": [],
+          "afterHeader": [],
+      }
+  ],
+  "psi-header.templates": [
+      {
+          "language": "*",
+          "template": [
+              "@file",
+              "@copyright Copyright <<year>> <<company>>. All right reserved",
+          ]
+      }
+  ]
+}

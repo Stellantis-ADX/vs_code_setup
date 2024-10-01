@@ -1,0 +1,28 @@
+---
+- name: Install VSCode extensions
+  become_user: "{{ main_user }}"
+  ansible.builtin.command: "code --install-extension {{ item }}"
+  loop: "{{ vs_code_extensions }}"
+  register: extensions_install
+  changed_when: extensions_install.rc != 0
+
+- name: Ensure VSCode user settings json file exists
+  ansible.builtin.stat:
+    path: "{{ home_dir }}/.config/Code/User/settings.json"
+  register: settings_file
+
+- name: Backup existing settings.json if it exists
+  become_user: "{{ main_user }}"
+  ansible.builtin.copy:
+    src: "{{ home_dir }}/.config/Code/User/settings.json"
+    dest: "{{ home_dir }}/.config/Code/User/settings.json.bak.{{ ansible_date_time.iso8601 }}"
+    remote_src: true
+    mode: "0644"
+  when: settings_file.stat.exists
+
+- name: Set new VSCode settings file
+  become_user: "{{ main_user }}"
+  ansible.builtin.template:
+    src: "{{ settings_template }}"
+    dest: "{{ home_dir }}/.config/Code/User/settings.json"
+    mode: "0644"

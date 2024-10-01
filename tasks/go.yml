@@ -1,0 +1,70 @@
+---
+- name: Download latest Go version
+  become_user: "{{ main_user }}"
+  ansible.builtin.get_url:
+    url: "https://go.dev/dl/go1.22.2.linux-amd64.tar.gz"
+    dest: "/tmp/go1.22.2.linux-amd64.tar.gz"
+    mode: "0644"
+
+- name: Remove any existing Go installation
+  ansible.builtin.command: "rm -rf /usr/local/go"
+  register: go_removal
+  changed_when: go_removal.rc != 0
+
+- name: Extract Go archive
+  ansible.builtin.unarchive:
+    src: "/tmp/go1.22.2.linux-amd64.tar.gz"
+    dest: "/usr/local"
+    remote_src: true
+
+- name: Ensure ~/go/bin is added to PATH in .bashrc
+  become_user: "{{ main_user }}"
+  ansible.builtin.lineinfile:
+    path: "{{ home_dir }}/.bashrc"
+    regexp: "^export PATH=.*{{ home_dir }}/go/bin"
+    line: 'export PATH="/usr/local/go/bin:{{ home_dir }}/go/bin:$PATH"'
+    insertafter: EOF
+    state: present
+
+- name: Ensure ~/go/bin is added to PATH in .zshrc (if Zsh is used)
+  become_user: "{{ main_user }}"
+  ansible.builtin.lineinfile:
+    path: "{{ home_dir }}/.zshrc"
+    regexp: "^export PATH=.*{{ home_dir }}/go/bin"
+    line: 'export PATH="/usr/local/go/bin:{{ home_dir }}/go/bin:$PATH"'
+    insertafter: EOF
+    state: present
+  when: ansible_facts['user_shell'] == "/bin/zsh"
+
+- name: Install buildtools
+  become_user: "{{ main_user }}"
+  ansible.builtin.command: "/usr/local/go/bin/go install github.com/bazelbuild/buildtools/{{ item }}@latest"
+  environment:
+    GOPATH: "{{ home_dir }}/go"
+    GOBIN: "{{ home_dir }}/go/bin"
+    PATH: "/usr/local/go/bin:{{ home_dir }}/go/bin:{{ ansible_env.PATH }}"
+  loop:
+    - buildifier
+    - buildozer
+  register: buildtools_install
+  changed_when: buildtools_install.rc != 0
+
+- name: Install actionlint
+  become_user: "{{ main_user }}"
+  ansible.builtin.command: "/usr/local/go/bin/go install github.com/rhysd/actionlint/cmd/actionlint@latest"
+  environment:
+    GOPATH: "{{ home_dir }}/go"
+    GOBIN: "{{ home_dir }}/go/bin"
+    PATH: "/usr/local/go/bin:{{ home_dir }}/go/bin:{{ ansible_env.PATH }}"
+  register: actionlint_install
+  changed_when: actionlint_install.rc != 0
+
+- name: Install shfmt
+  become_user: "{{ main_user }}"
+  ansible.builtin.command: "/usr/local/go/bin/go install mvdan.cc/sh/v3/cmd/shfmt@latest"
+  environment:
+    GOPATH: "{{ home_dir }}/go"
+    GOBIN: "{{ home_dir }}/go/bin"
+    PATH: "/usr/local/go/bin:{{ home_dir }}/go/bin:{{ ansible_env.PATH }}"
+  register: shfmt_install
+  changed_when: shfmt_install.rc != 0

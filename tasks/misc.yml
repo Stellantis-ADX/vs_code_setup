@@ -1,0 +1,6 @@
+---
+- name: Download and install StarPLS
+  ansible.builtin.get_url:
+    url: https://github.com/withered-magic/starpls/releases/download/v0.1.14/starpls-linux-amd64
+    dest: /usr/local/bin/starpls
+    mode: "0755"
