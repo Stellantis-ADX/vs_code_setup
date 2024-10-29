@@ -40,7 +40,7 @@ Intended for developers working on Ubuntu with Visual Studio Code.
 ### Clone this repository
 
 ```bash
-git clone git@github.adx.fcagroup.com:sf33267/ide_setup.git
+git clone git@github.com:Stellantis-ADX/vs_code_setup.git
 cd ide_setup
 ```
 
@@ -164,6 +164,16 @@ pre-commit install
 - ms-vscode-remote.remote-ssh
 - ms-vscode.remote-server
 ```
+
+## Known issues
+
+- Filetree renaming is taking a long time
+
+The `detachhead.basedpyright` extension is causing renames to take a long time.
+This issue is being tracked here:
+[github.com/DetachHead/basedpyright/issues/826](https://github.com/DetachHead/basedpyright/issues/826)
+
+_Fix_: Disable the `detachhead.basedpyright` extension.
 
 ## Contributions
 
