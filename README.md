@@ -138,7 +138,7 @@ pre-commit install
 - DavidAnson.vscode-markdownlint
 - yzhang.markdown-all-in-one
 # Python
-- detachhead.basedpyright
+- ms-pyright.pyright
 - ms-python.black-formatter
 - ms-python.debugpy
 - ms-python.isort
